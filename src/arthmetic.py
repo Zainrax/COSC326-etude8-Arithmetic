@@ -40,7 +40,7 @@ class ArthmeticN:
         self.target = t
         self.root = Node(self.numbers.pop(0))
         self.create_node(self.root,0)
-        self.inOrder(self.root)
+        # self.inOrder(self.root)
 
     def create_node(self,node,p):
         self.add_node(node,p)
@@ -49,9 +49,9 @@ class ArthmeticN:
     def add_node(self,node,p):
         if(p == len(self.numbers)): return
         node.additionNode = Node(self.numbers[p])
-        node.additionNode.addVal += node.addVal + node.value
-        node.additionNode.multiVal += node.multiVal
-        if((p == len(self.numbers)-1) & (node.additionNode.addVal+node.additionNode.multiVal) == self.target): 
+        node.additionNode.addVal = node.addVal + node.value
+        node.additionNode.multiVal = node.multiVal
+        if((p == len(self.numbers)-1) & (node.additionNode.addVal+node.additionNode.multiVal + node.value) == self.target): 
             print('found:{}'.format(node.additionNode.addVal+node.additionNode.multiVal))
             return
         if(node.additionNode.addVal+node.additionNode.multiVal > self.target): return
@@ -60,8 +60,8 @@ class ArthmeticN:
     def multiple_node(self,node,p):
         if(p == len(self.numbers)): return
         node.multiplicationNode = Node(self.numbers[p])
-        node.multiplicationNode.addVal += node.addVal
-        node.multiplicationNode.multiVal += node.value * node.multiplicationNode.value
+        node.multiplicationNode.addVal = node.addVal
+        node.multiplicationNode.multiVal = node.value * node.multiplicationNode.value
         if((p == len(self.numbers)- 1)  & (node.multiplicationNode.addVal+node.multiplicationNode.multiVal) == self.target): 
             print('found:{}'.format(node.multiplicationNode.addVal+node.multiplicationNode.multiVal))
             return
@@ -69,11 +69,11 @@ class ArthmeticN:
         self.create_node(node.multiplicationNode,p+1)
     
     def inOrder(self,node):
-        print("{}-plus:{},multi:{}".format(node.value,node.addVal,node.multiVal))
+        print("{}-{}".format(node.value,node.addVal+node.multiVal))
         if(node.additionNode!=None):
             self.inOrder(node.additionNode)
         if(node.multiplicationNode!=None):
             self.inOrder(node.multiplicationNode)
 
 ArthmeticN([1,2,3],6)
-# ArthmeticN([1,2,3,4,5,6,7,8,9,10],172)
+ArthmeticN([1,2,3,4,5,6,7,8,9,10],172)
