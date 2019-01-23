@@ -5,6 +5,7 @@ class Node:
         self.multiVal = 0
         self.additionNode = None
         self.multiplicationNode = None
+        self.endValue = 0
 
 
 class ArthmeticLR:
@@ -47,25 +48,36 @@ class ArthmeticN:
         self.multiple_node(node,p)
 
     def add_node(self,node,p):
-        if(p == len(self.numbers)): return
-        node.additionNode = Node(self.numbers[p])
-        node.additionNode.addVal = node.addVal + node.value
-        node.additionNode.multiVal = node.multiVal
-        if((p == len(self.numbers)-1) & (node.additionNode.addVal+node.additionNode.multiVal + node.value) == self.target): 
-            print('found:{}'.format(node.additionNode.addVal+node.additionNode.multiVal))
+        if(node.addVal == 0): node.addVal = node.value
+        if((p == len(self.numbers)) & (node.addVal+node.multiVal == self.target)): 
+            print('found:{}'.format(node.addVal+node.multiVal))
+            node.endValue = node.addVal +node.multiVal
             return
+        elif(p == len(self.numbers) | node.addVal+node.multiVal > self.target):
+            node.endValue = node.addVal + node.multiVal
+            return
+
+        node.additionNode = Node(self.numbers[p])
+        node.additionNode.addVal = node.addVal + node.additionNode.value
+        node.additionNode.multiVal = node.multiVal
+        
         if(node.additionNode.addVal+node.additionNode.multiVal > self.target): return
         self.create_node(node.additionNode,p+1)
 
     def multiple_node(self,node,p):
-        if(p == len(self.numbers)): return
+        if(node.addVal == 0): node.addVal = node.value
+        if((p == len(self.numbers)) & (node.addVal+node.multiVal == self.target)): 
+            print('found:{}'.format(node.addVal + node.multiVal))
+            node.endValue = node.addVal + node.multiVal
+            return
+        elif(p == len(self.numbers) | node.addVal+node.multiVal > self.target):
+            node.endValue = node.addVal+node.multiVal
+            return
+
         node.multiplicationNode = Node(self.numbers[p])
         node.multiplicationNode.addVal = node.addVal
-        node.multiplicationNode.multiVal = node.value * node.multiplicationNode.value
-        if((p == len(self.numbers)- 1)  & (node.multiplicationNode.addVal+node.multiplicationNode.multiVal) == self.target): 
-            print('found:{}'.format(node.multiplicationNode.addVal+node.multiplicationNode.multiVal))
-            return
-        if(node.multiplicationNode.addVal+node.multiplicationNode.multiVal > self.target): return
+        node.multiplicationNode.multiVal = node.multiVal + node.value * node.multiplicationNode.value
+
         self.create_node(node.multiplicationNode,p+1)
     
     def inOrder(self,node):
