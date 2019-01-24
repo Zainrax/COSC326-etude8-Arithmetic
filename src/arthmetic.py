@@ -49,35 +49,35 @@ class ArthmeticN:
 
     def add_node(self,node,p):
         if(node.addVal == 0): node.addVal = node.value
-        if((p == len(self.numbers)) & (node.addVal+node.multiVal == self.target)): 
-            print('found:{}'.format(node.addVal+node.multiVal))
-            node.endValue = node.addVal +node.multiVal
+        if(p == len(self.numbers)-1):
+            node.additionNode = Node(self.numbers[p])
+            node.additionNode.endValue = node.addVal+self.numbers[p]+node.multiVal
+            if(node.additionNode.endValue == self.target):
+                print(node.additionNode.endValue)
             return
-        elif(p == len(self.numbers) | node.addVal+node.multiVal > self.target):
-            node.endValue = node.addVal + node.multiVal
+        elif(node.addVal+self.numbers[p]+node.multiVal > self.target):
             return
-
+            
+        value = node.addVal+self.numbers[p]
         node.additionNode = Node(self.numbers[p])
-        node.additionNode.addVal = node.addVal + node.additionNode.value
+        node.additionNode.addVal = value
         node.additionNode.multiVal = node.multiVal
-        
-        if(node.additionNode.addVal+node.additionNode.multiVal > self.target): return
         self.create_node(node.additionNode,p+1)
 
     def multiple_node(self,node,p):
         if(node.addVal == 0): node.addVal = node.value
-        if((p == len(self.numbers)) & (node.addVal+node.multiVal == self.target)): 
-            print('found:{}'.format(node.addVal + node.multiVal))
-            node.endValue = node.addVal + node.multiVal
+        if(p == len(self.numbers)-1):
+            node.multiplicationNode = Node(self.numbers[p])
+            node.multiplicationNode.endValue = node.value * self.numbers[p] + node.addVal + node.multiVal
+            if(node.multiplicationNode.endValue == self.target):
+                print(node.additionNode.endValue)
             return
-        elif(p == len(self.numbers) | node.addVal+node.multiVal > self.target):
-            node.endValue = node.addVal+node.multiVal
+        elif(node.value * self.numbers[p] + node.addVal + node.multiVal > self.target):
             return
-
+        value = node.value * self.numbers[p]
         node.multiplicationNode = Node(self.numbers[p])
         node.multiplicationNode.addVal = node.addVal
-        node.multiplicationNode.multiVal = node.multiVal + node.value * node.multiplicationNode.value
-
+        node.multiplicationNode.multiVal = value
         self.create_node(node.multiplicationNode,p+1)
     
     def inOrder(self,node):
@@ -87,5 +87,6 @@ class ArthmeticN:
         if(node.multiplicationNode!=None):
             self.inOrder(node.multiplicationNode)
 
-ArthmeticN([1,2,3],6)
-ArthmeticN([1,2,3,4,5,6,7,8,9,10],172)
+
+ArthmeticN([1,2,3],9)
+ArthmeticN([1,2,3,4,5,6,7,8,9],100)
